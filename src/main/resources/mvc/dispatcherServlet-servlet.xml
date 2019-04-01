@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+			http://www.springframework.org/schema/mvc
+			http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-4.2.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+    <!--扫描包路径下的类注解-->
+    <context:component-scan base-package="com.java.*"></context:component-scan>
+    <!--mvc开启注解驱动-->
+    <mvc:annotation-driven/>
+    <!--视图解析器.....可以省略路劲前后缀-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--<property name="prefix" value="/pages/admin/"></property>
+        <property name="suffix" value=".jsp"></property>-->
+    </bean>
+    <!--文件上传,id只能写成multipartResolver-->
+        <!--处理中文乱码-->
+        <!--限制文件上传的大小，单位：字节-->
+        <!--所有文件总的大小1024*1024*10-->
+        <!--单个文件的大小-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <property name="maxUploadSize" value="10485760"></property>
+        <property name="maxUploadSizePerFile" value="1048576"></property>
+    </bean>
+    <!--定时任务-->
+    <task:scheduler id="scheduler" pool-size="10" />
+    <task:executor id="executor" keep-alive="3600" pool-size="100-200" queue-capacity="500" rejection-policy="CALLER_RUNS" />
+    <task:annotation-driven executor="executor" scheduler="scheduler" />
+
+</beans>
